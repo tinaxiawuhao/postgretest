@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.postgretest.mapper.postgresql.TsKvMapper">
+
+    <resultMap type="com.example.postgretest.entity.TsKv" id="TsKvMap">
+        <result property="ts" column="ts" jdbcType="INTEGER"/>
+        <result property="key" column="key" jdbcType="INTEGER"/>
+        <result property="boolV" column="bool_v" jdbcType="BOOLEAN"/>
+        <result property="strV" column="str_v" jdbcType="VARCHAR"/>
+        <result property="longV" column="long_v" jdbcType="INTEGER"/>
+        <result property="dblV" column="dbl_v" jdbcType="NUMERIC"/>
+        <result property="jsonV" column="json_v" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TsKvMap">
+        select
+        ts, key, bool_v, str_v, long_v, dbl_v, json_v
+        from ts_kv
+        <where>
+            <if test="ts != null">
+                and ts = #{ts}
+            </if>
+            <if test="key != null">
+                and key = #{key}
+            </if>
+            <if test="boolV != null">
+                and bool_v = #{boolV}
+            </if>
+            <if test="strV != null and strV != ''">
+                and str_v = #{strV}
+            </if>
+            <if test="longV != null">
+                and long_v = #{longV}
+            </if>
+            <if test="dblV != null">
+                and dbl_v = #{dblV}
+            </if>
+            <if test="jsonV != null and jsonV != ''">
+                and json_v = #{jsonV}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch" keyProperty="ts" useGeneratedKeys="true">
+        insert into ts_kv(bool_v, str_v, long_v, dbl_v, json_v)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.boolV}, #{entity.strV}, #{entity.longV}, #{entity.dblV}, #{entity.jsonV})
+        </foreach>
+    </insert>
+
+    <!--需要通过在数据库连接URL中指定allowMultiQueries参数值为true告诉数据库以支持”;"号分隔的多条语句的执行-->
+    <update id="updateBatch">
+        <foreach collection="entities" item="entity" separator=";">
+            update ts_kv
+            <set>
+                <if test="entity.boolV != null">
+                    bool_v = #{entity.boolV},
+                </if>
+                <if test="entity.strV != null and entity.strV != ''">
+                    str_v = #{entity.strV},
+                </if>
+                <if test="entity.longV != null">
+                    long_v = #{entity.longV},
+                </if>
+                <if test="entity.dblV != null">
+                    dbl_v = #{entity.dblV},
+                </if>
+                <if test="entity.jsonV != null and entity.jsonV != ''">
+                    json_v = #{entity.jsonV},
+                </if>
+            </set>
+            where ts = #{entity.ts}
+        </foreach>
+    </update>
+
+    <!--创建超表-->
+    <select id="createHypertable" parameterType="com.example.postgretest.entity.base.Table" resultType="string">
+        SELECT create_hypertable('${table.tableName}', '${table.column}',  chunk_time_interval =>  INTERVAL '1 day', if_not_exists => true);
+    </select>
+    <!--创建分布式超表-->
+    <select id="createDistributedHypertable" parameterType="com.example.postgretest.entity.base.Table" resultType="string">
+        SELECT create_distributed_hypertable('${table.tableName}', '${table.column}',  chunk_time_interval =>  INTERVAL '1 day', if_not_exists => true);
+    </select>
+</mapper>

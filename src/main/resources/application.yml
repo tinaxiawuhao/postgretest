@@ -1,0 +1,53 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: postgretest
+  datasource:
+#    primary:
+#      jdbc-url: jdbc:mysql://${DATASOURCE_URL:127.0.0.1:3306/nexteer}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&useSSL=false
+#      username: ${DATASOURCE_USERNAME:root}
+#      password: ${DATASOURCE_PASSWORD:123456}
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#    secondary:
+#      jdbc-url: jdbc:postgresql://${DATASOURCE_URL:localhost:5432/test}
+#      username: ${DATASOURCE_USERNAME:postgres}
+#      password: ${DATASOURCE_PASSWORD:123456}
+#      driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATASOURCE_URL:127.0.0.1:5432/timescale}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 10000
+      connection-test-query: SELECT 1
+  servlet:
+    multipart:
+      max-file-size: 10MB #限制单个文件的最大值 1MB
+      max-request-size: 100MB # 限制上传的多个文件的总大小
+
+mybatis-plus:
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+## swagger自定义配置属性
+swagger:
+  enabled: true
+  title: 在线接口平台
+  description: 服务相关接口
+
+

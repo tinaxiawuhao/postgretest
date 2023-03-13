@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.postgretest.mapper.postgresql.TClubMapper">
+
+    <resultMap type="com.example.postgretest.entity.TClub" id="TClubMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="money" column="money" jdbcType="INTEGER"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TClubMap">
+        select
+        id, name, money, nick_name, birthday, create_time, update_time
+        from t_club
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="money != null">
+                and money = #{money}
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name = #{nickName}
+            </if>
+            <if test="birthday != null">
+                and birthday = #{birthday}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_club(name, money, nick_name, birthday, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.money}, #{entity.nickName}, #{entity.birthday}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <!--需要通过在数据库连接URL中指定allowMultiQueries参数值为true告诉数据库以支持”;"号分隔的多条语句的执行-->
+    <update id="updateBatch">
+        <foreach collection="entities" item="entity" separator=";">
+            update t_club
+            <set>
+                <if test="entity.name != null and entity.name != ''">
+                    name = #{entity.name},
+                </if>
+                <if test="entity.money != null">
+                    money = #{entity.money},
+                </if>
+                <if test="entity.nickName != null and entity.nickName != ''">
+                    nick_name = #{entity.nickName},
+                </if>
+                <if test="entity.birthday != null">
+                    birthday = #{entity.birthday},
+                </if>
+                <if test="entity.createTime != null">
+                    create_time = #{entity.createTime},
+                </if>
+                <if test="entity.updateTime != null">
+                    update_time = #{entity.updateTime},
+                </if>
+            </set>
+            where id = #{entity.id}
+        </foreach>
+    </update>
+</mapper>
