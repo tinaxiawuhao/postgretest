@@ -101,6 +101,17 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
         </dependency>
+        <!-- cassandra -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-cassandra</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.datastax.cassandra</groupId>-->
+<!--            <artifactId>cassandra-driver-core</artifactId>-->
+<!--            <version>3.11.0</version>-->
+<!--        </dependency>-->
+
     </dependencies>
 
     <build>
