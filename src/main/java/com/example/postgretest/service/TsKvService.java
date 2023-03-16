@@ -42,16 +42,14 @@ public interface TsKvService extends IService<TsKv> {
     /**
      * 创建超表
      *
-     * @param tableName 表名
-     * @param column 列名
+     * @param table 表对象
      */
     void createHypertable(Table table);
 
     /**
      * 创建分布式超表
      *
-     * @param tableName 表名
-     * @param column 列名
+     * @param table 表对象
      */
     void createDistributedHypertable(Table table);
 }
