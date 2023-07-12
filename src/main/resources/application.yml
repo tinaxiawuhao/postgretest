@@ -41,6 +41,14 @@ spring:
       password:
       keyspace-name: test
 
+  influx:
+    bucket: java_api_bucket
+    org: itstyle
+    url: http://127.0.0.1:8086
+    user: admin
+    password:
+    token:
+
   servlet:
     multipart:
       max-file-size: 10MB #限制单个文件的最大值 1MB
