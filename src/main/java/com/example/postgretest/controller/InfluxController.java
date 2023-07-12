@@ -1,20 +1,19 @@
 package com.example.postgretest.controller;
 
-import com.example.postgretest.entity.TsKv;
-import com.example.postgretest.entity.base.SearchPage;
+import com.example.postgretest.entity.TerminalHeartBeatModel;
 import com.example.postgretest.exception.basic.APIResponse;
 import com.example.postgretest.mapper.influx.InfluxRepository;
-import com.example.postgretest.service.TsKvService;
-import com.github.pagehelper.PageInfo;
-import com.influxdb.query.FluxTable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * (Influx)表控制层
@@ -37,44 +36,19 @@ public class InfluxController {
     @GetMapping(value = "/save")
     @ApiOperation(value = "保存", notes = "保存")
     public APIResponse save() {
-        Map<String,Object> map=new HashMap<>();
-        map.put("humidity",121);
-        map.put("deviceId",11);
-        this.influxRepository.save("tableName",map);
+        this.influxRepository.save(TerminalHeartBeatModel.builder()
+                .id(1L)
+                .mac("00:aa:00:aa:00:00")
+                .time(LocalDateTime.now()).build());
         return APIResponse.ok();
     }
 
-    @GetMapping(value = "/findAll")
+    @GetMapping(value = "/getList")
     @ApiOperation(value = "发现", notes = "发现")
-    public APIResponse<List<FluxTable>> findAll() {
-        return APIResponse.ok(this.influxRepository.findAll());
+    public APIResponse<List<TerminalHeartBeatModel>> getList() {
+        Map<String, Object> map = new TreeMap<>();
+        map.put("mac", "00:aa:00:aa:00:00");
+        return APIResponse.ok(this.influxRepository.getList(map,LocalDateTime.of(2023,7,12,15, 1, 1),LocalDateTime.now()));
     }
 
-    @GetMapping(value = "/insertData")
-    @ApiOperation(value = "同步写入API", notes = "同步写入API")
-    public APIResponse insertData() {
-        this.influxRepository.insertData();
-        return APIResponse.ok();
-    }
-
-    @GetMapping(value = "/aysnInserData")
-    @ApiOperation(value = "异步写入API", notes = "异步写入API")
-    public APIResponse aysnInserData() {
-        this.influxRepository.aysnInserData();
-        return APIResponse.ok();
-    }
-
-    @GetMapping(value = "/delete")
-    @ApiOperation(value = "删除", notes = "删除")
-    public APIResponse delete() {
-        this.influxRepository.delete();
-        return APIResponse.ok();
-    }
-
-    @GetMapping(value = "/query")
-    @ApiOperation(value = "查询", notes = "查询")
-    public APIResponse query() {
-        this.influxRepository.query();
-        return APIResponse.ok();
-    }
 }

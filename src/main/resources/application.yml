@@ -41,18 +41,17 @@ spring:
       password:
       keyspace-name: test
 
-  influx:
-    bucket: java_api_bucket
-    org: itstyle
-    url: http://127.0.0.1:8086
-    user: admin
-    password:
-    token:
-
   servlet:
     multipart:
       max-file-size: 10MB #限制单个文件的最大值 1MB
       max-request-size: 100MB # 限制上传的多个文件的总大小
+
+
+influxdb:
+  url: http://127.0.0.1:8086
+  username: admin         #用户
+  password:           #密码
+  database: test         #库
 
 mybatis-plus:
   # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
