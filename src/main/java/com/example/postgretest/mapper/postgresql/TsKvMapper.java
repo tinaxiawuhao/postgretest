@@ -3,6 +3,7 @@ package com.example.postgretest.mapper.postgresql;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.postgretest.entity.TsKv;
 import com.example.postgretest.entity.base.Table;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
  * @author makejava
  * @since 2023-03-13 10:47:15
  */
+@Mapper
+//@DS("secondary")  //指定数据源注解，名称与配置数据源名称一致
 public interface TsKvMapper extends BaseMapper<TsKv> {
 
     /**
