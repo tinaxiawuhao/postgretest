@@ -46,6 +46,15 @@ spring:
       max-file-size: 10MB #限制单个文件的最大值 1MB
       max-request-size: 100MB # 限制上传的多个文件的总大小
 
+#解决双数据源分页问题
+#pagehelper:
+#  #启用合理化，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
+#  auto-runtime-dialect: false
+#  auto-dialect: true
+#  helperDialect: postgresql
 
 influxdb:
   url: http://127.0.0.1:8086
